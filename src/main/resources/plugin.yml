@@ -1,0 +1,11 @@
+name: Minigame
+version: '${project.version}'
+main: me.megamagnum.main.Main
+api-version: 1.19
+
+
+commands:
+  setup:
+    description: Setup a minigame!
+  join:
+    description: Join a starting minigame
