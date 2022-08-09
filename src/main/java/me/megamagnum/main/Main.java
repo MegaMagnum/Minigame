@@ -2,6 +2,7 @@ package me.megamagnum.main;
 
 import me.megamagnum.main.commands.commandJoin;
 import me.megamagnum.main.commands.commandSetup;
+import me.megamagnum.main.commands.Deathevent;
 import me.megamagnum.main.storage.Storage;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,7 @@ public final class Main extends JavaPlugin {
         // Build || Load config / storage
         Storage.setup();
         Storage.get().options().copyDefaults(true);
+        Storage.get().getDefaults();
         Storage.save();
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -21,7 +23,7 @@ public final class Main extends JavaPlugin {
         getCommand("join").setExecutor(new commandJoin());
 
         // Event handlers
-
+        getServer().getPluginManager().registerEvents(new Deathevent(), this);
 
     }
 

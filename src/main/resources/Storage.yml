@@ -1,0 +1,21 @@
+Minigame:
+  IsStarting: false
+Respawnlocs: true
+loc1:
+   ==: org.bukkit.Location
+   world: world
+    x: 36.806485553289406
+    y: 68.0
+    z: -153.14100060827465
+loc2:
+   ==: org.bukkit.Location
+   world: world
+    x: 40.806485553289406
+    y: 68.0
+    z: -153.14100060827465
+loc3:
+   ==: org.bukkit.Location
+   world: world
+    x: 44.806485553289406
+    y: 68.0
+    z: -153.14100060827465
