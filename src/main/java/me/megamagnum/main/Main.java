@@ -4,6 +4,7 @@ import me.megamagnum.main.commands.commandJoin;
 import me.megamagnum.main.commands.commandSetup;
 import me.megamagnum.main.commands.Deathevent;
 import me.megamagnum.main.storage.Storage;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
@@ -17,6 +18,7 @@ public final class Main extends JavaPlugin {
         Storage.save();
         getConfig().options().copyDefaults(true);
         saveConfig();
+
 
         // Commands
         getCommand("setup").setExecutor(new commandSetup());
