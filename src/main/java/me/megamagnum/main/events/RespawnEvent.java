@@ -1,6 +1,7 @@
-package me.megamagnum.main.commands;
+package me.megamagnum.main.events;
 
 import me.megamagnum.main.Main;
+import me.megamagnum.main.commands.commandJoin;
 import me.megamagnum.main.storage.Storage;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,10 +22,8 @@ public class RespawnEvent implements Listener {
     public void onDeath(PlayerRespawnEvent e) {
         if (e.getPlayer() instanceof Player) {
             Player p = e.getPlayer();
-         //   if (commandJoin.joinedplayers.contains(p.getUniqueId())) {
-             //   if (Storage.get().getBoolean("Minigame." + "started", true)) {
-
-              //  Player killer =    e.getEntity().getKiller();
+            if (commandJoin.joinedplayers.contains(p.getUniqueId())) {
+                if (Storage.get().getBoolean("Minigame." + "started", true)) {
 
 
                 p.setInvulnerable(true);
@@ -92,9 +91,8 @@ public class RespawnEvent implements Listener {
 
                 }
             }
-      // }
-
-   // }
+       }
+    }
 
 
 }

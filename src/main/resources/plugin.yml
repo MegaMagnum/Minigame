@@ -7,5 +7,7 @@ api-version: 1.19
 commands:
   setup:
     description: Setup a minigame!
+    permission: minigame.setup
+    permission-message: No perms!!!!
   join:
     description: Join a starting minigame

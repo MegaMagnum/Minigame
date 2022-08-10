@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class commandJoin implements CommandExecutor {
-    static ArrayList<UUID> joinedplayers = new ArrayList<>();
+    public static ArrayList<UUID> joinedplayers = new ArrayList<>();
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Boolean starting = Storage.get().getBoolean("Minigame." + "IsStarting");
@@ -19,9 +19,10 @@ public class commandJoin implements CommandExecutor {
             Player p = (Player) sender;
             if (starting) {
                 if(joinedplayers.contains(p.getUniqueId())) {
-                    p.sendMessage("zit er al in");
+                    p.sendMessage(ChatColor.RED + "Already joined!");
                 }else{
                     joinedplayers.add(p.getUniqueId());
+                    p.sendMessage(ChatColor.RED + "Joined the minigame. Wait till it starts!");
                 }
 
 

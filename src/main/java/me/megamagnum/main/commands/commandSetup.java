@@ -1,6 +1,7 @@
 package me.megamagnum.main.commands;
 
 import me.megamagnum.main.Main;
+import me.megamagnum.main.MinigameTimer;
 import me.megamagnum.main.storage.Storage;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -21,9 +22,6 @@ public class commandSetup implements CommandExecutor {
     public HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
     Main main = Main.getPlugin(Main.class);
 
-
-
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(Storage.get().get("Minigame." + "IsStarting") == null){
@@ -34,89 +32,78 @@ public class commandSetup implements CommandExecutor {
             Storage.get().set("Minigame." + "IsStarting", true);
             Storage.save();
             Boolean starting = Storage.get().getBoolean("Minigame." + "IsStarting");
-
             new BukkitRunnable() {
                 int mleft = 5;
-
                 public void run() {
+                    //Waiting timer!
                     mleft--;
                     if (mleft == 1) {
                         cancel();
                     }
                     Bukkit.broadcastMessage(ChatColor.AQUA + "A minigame is going to begin! Do /join to join the minigame. Minigame will start in " + mleft + " minutes!");
-
                 }
-
             }.runTaskTimer(main, 1200, 1200);
-            //1200
-
+            //1200 - 1 minute
             new BukkitRunnable() {
                 public void run() {
+                    // Start game
+                    MinigameTimer.timer();
+
                     for (Player online : Bukkit.getOnlinePlayers()) {
                         if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
                             Storage.get().set("Players."+online.getUniqueId() +"."+  "loc", online.getLocation());
                             Storage.save();
                             online.sendMessage(ChatColor.LIGHT_PURPLE + "Minigame starting..");
                             Storage.get().set("Players."+"mainhand." + online.getUniqueId(), online.getInventory().getItemInMainHand());
-
                             ItemStack snowball = new ItemStack(Material.SNOWBALL);
                             ItemMeta snowballmeta = snowball.getItemMeta();
                             snowballmeta.setDisplayName(ChatColor.AQUA + "Dit is geen sneeuw..");
                             snowball.setItemMeta(snowballmeta);
                             snowball.setAmount(64);
+                            // TP to arena (Storage for coords)
                             tprandom(online);
+                            // All start inventory interactions
                             ItemStack[] playerinv = online.getInventory().getContents();
                             HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
                             itemhash.put(online, playerinv);
                             online.getInventory().clear();
                             online.getInventory().addItem(snowball);
+
+                            // Save old maxhealth and set maxhealth to 1
                             double maxhealth = 1;
                             double oldmaxhealth = online.getMaxHealth();
                             online.setMaxHealth(maxhealth);
-
-
-
                             new BukkitRunnable(){
                                 public void run(){
+                                    // End minigame
+
                                     online.setMaxHealth(oldmaxhealth);
                                     online.getInventory().clear();
 
-                                    if(itemhash.containsKey(online)){
+                                    if(itemhash.containsKey(online)) {
                                         ItemStack[] items = itemhash.get(online);
                                         PlayerInventory inv = online.getInventory();
-                                        for(ItemStack item : items){
-                                            if(item == null){
+                                        for (ItemStack item : items) {
+                                            if (item == null) {
 
-                                            }else {
+                                            } else {
                                                 online.getInventory().addItem(item);
                                             }
                                         }
-
-                                        Location oldloc = Storage.get().getLocation("Players."+online.getUniqueId() +"."+  "loc");
+                                        Location oldloc = Storage.get().getLocation("Players." + online.getUniqueId() + "." + "loc");
 
                                         online.teleport(oldloc);
 
 
-                                        Storage.get().set("Minigame."+"started", false);
+                                        Storage.get().set("Minigame." + "started", false);
                                         Storage.save();
 
                                         commandJoin.joinedplayers.clear();
 
-
-
-
+                                    }
                                     }
 
-
-
-                                    }
-
-
-
-                            }.runTaskLater(main, 240);
-
-
-
+                            }.runTaskLater(main, 6000);
 
                         }
                     }
@@ -126,9 +113,7 @@ public class commandSetup implements CommandExecutor {
                    Storage.get().set("Minigame." + "IsStarting", false);
                    Storage.save();
 
-
                 }
-
 
             }.runTaskLater(main, 180);
 
