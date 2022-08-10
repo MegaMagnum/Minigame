@@ -2,9 +2,9 @@ package me.megamagnum.main;
 
 import me.megamagnum.main.commands.commandJoin;
 import me.megamagnum.main.commands.commandSetup;
-import me.megamagnum.main.commands.Deathevent;
+import me.megamagnum.main.commands.RespawnEvent;
+import me.megamagnum.main.events.DeathEvent;
 import me.megamagnum.main.storage.Storage;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
@@ -25,7 +25,8 @@ public final class Main extends JavaPlugin {
         getCommand("join").setExecutor(new commandJoin());
 
         // Event handlers
-        getServer().getPluginManager().registerEvents(new Deathevent(), this);
+        getServer().getPluginManager().registerEvents(new RespawnEvent(), this);
+        getServer().getPluginManager().registerEvents(new DeathEvent(), this);
 
     }
 

@@ -1,23 +1,45 @@
 package me.megamagnum.main.commands;
 
+import me.megamagnum.main.Main;
 import me.megamagnum.main.storage.Storage;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
-public class Deathevent implements Listener {
+public class RespawnEvent implements Listener {
+    Main main = Main.getPlugin(Main.class);
+
+
+
     @EventHandler
-    public static void onDeath(PlayerChatEvent e) {
+    public void onDeath(PlayerRespawnEvent e) {
         if (e.getPlayer() instanceof Player) {
-            Player p = (Player) e.getPlayer();
+            Player p = e.getPlayer();
          //   if (commandJoin.joinedplayers.contains(p.getUniqueId())) {
              //   if (Storage.get().getBoolean("Minigame." + "started", true)) {
+
+              //  Player killer =    e.getEntity().getKiller();
+
+
+                p.setInvulnerable(true);
+                p.setInvisible(true);
+
+                new BukkitRunnable(){
+                    public void run(){
+                        p.setInvulnerable(false);
+                        p.setInvisible(false);
+
+
+
+                    }
+
+                }.runTaskLater(main, 60);
 
 
 
@@ -61,11 +83,12 @@ public class Deathevent implements Listener {
                     Random r = new Random();
                     int locr = r.nextInt(6);
                     int randomint = locr;
-                    p.teleport(respawn[randomint]);
+                    e.setRespawnLocation(respawn[randomint]);
                     p.sendMessage("loc:"+randomint);
 
                     double maxhealth = p.getMaxHealth();
                     p.setHealth(maxhealth);
+
 
                 }
             }

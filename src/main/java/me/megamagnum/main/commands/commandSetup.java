@@ -7,15 +7,21 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class commandSetup implements CommandExecutor {
+
+    public HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
     Main main = Main.getPlugin(Main.class);
+
+
 
 
     @Override
@@ -48,7 +54,7 @@ public class commandSetup implements CommandExecutor {
                 public void run() {
                     for (Player online : Bukkit.getOnlinePlayers()) {
                         if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
-                            Storage.get().set("Players."+online.getUniqueId(), online.getLocation());
+                            Storage.get().set("Players."+online.getUniqueId() +"."+  "loc", online.getLocation());
                             Storage.save();
                             online.sendMessage(ChatColor.LIGHT_PURPLE + "Minigame starting..");
                             Storage.get().set("Players."+"mainhand." + online.getUniqueId(), online.getInventory().getItemInMainHand());
@@ -58,51 +64,56 @@ public class commandSetup implements CommandExecutor {
                             snowballmeta.setDisplayName(ChatColor.AQUA + "Dit is geen sneeuw..");
                             snowball.setItemMeta(snowballmeta);
                             snowball.setAmount(64);
-
-                            online.getInventory().setItemInMainHand(snowball);
-
-                            int loc1x =     Storage.get().getInt("Respawnloc."+ "loc1." +"x");
-                            int loc1y =     Storage.get().getInt("Respawnloc."+ "loc1." +"y");
-                            int loc1z =     Storage.get().getInt("Respawnloc."+ "loc1." +"z");
-
-                            int loc2x =     Storage.get().getInt("Respawnloc."+ "loc2." +"x");
-                            int loc2y =     Storage.get().getInt("Respawnloc."+ "loc2." +"y");
-                            int loc2z =     Storage.get().getInt("Respawnloc."+ "loc2." +"z");
-
-                            int loc3x =     Storage.get().getInt("Respawnloc."+ "loc3." +"x");
-                            int loc3y =     Storage.get().getInt("Respawnloc."+ "loc3." +"y");
-                            int loc3z =     Storage.get().getInt("Respawnloc."+ "loc3." +"z");
-
-                            int loc4x =     Storage.get().getInt("Respawnloc."+ "loc4." +"x");
-                            int loc4y =     Storage.get().getInt("Respawnloc."+ "loc4." +"y");
-                            int loc4z =     Storage.get().getInt("Respawnloc."+ "loc4." +"z");
-
-                            int loc5x =     Storage.get().getInt("Respawnloc."+ "loc5." +"x");
-                            int loc5y =     Storage.get().getInt("Respawnloc."+ "loc5." +"y");
-                            int loc5z =     Storage.get().getInt("Respawnloc."+ "loc5." +"z");
-
-                            int loc6x =     Storage.get().getInt("Respawnloc."+ "loc6." +"x");
-                            int loc6y =     Storage.get().getInt("Respawnloc."+ "loc6." +"y");
-                            int loc6z =     Storage.get().getInt("Respawnloc."+ "loc6." +"z");
-
-                            World world = online.getWorld();
-
-                            Location loc1 = new Location(world, loc1x, loc1y,loc1z);
-                            Location loc2 = new Location(world, loc2x,loc2y,loc2z);
-                            Location loc3 = new Location(world, loc3x, loc3y, loc3z);
-                            Location loc4 = new Location(world, loc4x, loc4y, loc4z);
-                            Location loc5 = new Location(world, loc5x, loc5y, loc5z);
-                            Location loc6 = new Location(world, loc6x, loc6y, loc6z);
+                            tprandom(online);
+                            ItemStack[] playerinv = online.getInventory().getContents();
+                            HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
+                            itemhash.put(online, playerinv);
+                            online.getInventory().clear();
+                            online.getInventory().addItem(snowball);
+                            double maxhealth = 1;
+                            double oldmaxhealth = online.getMaxHealth();
+                            online.setMaxHealth(maxhealth);
 
 
 
-                            Location[] respawn = {loc1, loc2, loc3, loc4, loc5, loc6};
-                            Random r = new Random();
-                            int locr = r.nextInt(6);
-                            int randomint = locr;
-                            online.teleport(respawn[randomint]);
-                            online.sendMessage("loc:"+randomint);
+                            new BukkitRunnable(){
+                                public void run(){
+                                    online.setMaxHealth(oldmaxhealth);
+                                    online.getInventory().clear();
 
+                                    if(itemhash.containsKey(online)){
+                                        ItemStack[] items = itemhash.get(online);
+                                        PlayerInventory inv = online.getInventory();
+                                        for(ItemStack item : items){
+                                            if(item == null){
+
+                                            }else {
+                                                online.getInventory().addItem(item);
+                                            }
+                                        }
+
+                                        Location oldloc = Storage.get().getLocation("Players."+online.getUniqueId() +"."+  "loc");
+
+                                        online.teleport(oldloc);
+
+
+                                        Storage.get().set("Minigame."+"started", false);
+                                        Storage.save();
+
+                                        commandJoin.joinedplayers.clear();
+
+
+
+
+                                    }
+
+
+
+                                    }
+
+
+
+                            }.runTaskLater(main, 240);
 
 
 
@@ -112,8 +123,8 @@ public class commandSetup implements CommandExecutor {
                     Storage.get().set("Minigame."+"started", true);
                     Storage.save();
 
-                    Storage.get().set("Minigame." + "IsStarting", false);
-                    Storage.save();
+                   Storage.get().set("Minigame." + "IsStarting", false);
+                   Storage.save();
 
 
                 }
@@ -126,6 +137,52 @@ public class commandSetup implements CommandExecutor {
 
         }
         return true;
+    }
+    public static void tprandom(Player online){
+
+        int loc1x =     Storage.get().getInt("Respawnloc."+ "loc1." +"x");
+        int loc1y =     Storage.get().getInt("Respawnloc."+ "loc1." +"y");
+        int loc1z =     Storage.get().getInt("Respawnloc."+ "loc1." +"z");
+
+        int loc2x =     Storage.get().getInt("Respawnloc."+ "loc2." +"x");
+        int loc2y =     Storage.get().getInt("Respawnloc."+ "loc2." +"y");
+        int loc2z =     Storage.get().getInt("Respawnloc."+ "loc2." +"z");
+
+        int loc3x =     Storage.get().getInt("Respawnloc."+ "loc3." +"x");
+        int loc3y =     Storage.get().getInt("Respawnloc."+ "loc3." +"y");
+        int loc3z =     Storage.get().getInt("Respawnloc."+ "loc3." +"z");
+
+        int loc4x =     Storage.get().getInt("Respawnloc."+ "loc4." +"x");
+        int loc4y =     Storage.get().getInt("Respawnloc."+ "loc4." +"y");
+        int loc4z =     Storage.get().getInt("Respawnloc."+ "loc4." +"z");
+
+        int loc5x =     Storage.get().getInt("Respawnloc."+ "loc5." +"x");
+        int loc5y =     Storage.get().getInt("Respawnloc."+ "loc5." +"y");
+        int loc5z =     Storage.get().getInt("Respawnloc."+ "loc5." +"z");
+
+        int loc6x =     Storage.get().getInt("Respawnloc."+ "loc6." +"x");
+        int loc6y =     Storage.get().getInt("Respawnloc."+ "loc6." +"y");
+        int loc6z =     Storage.get().getInt("Respawnloc."+ "loc6." +"z");
+
+        World world = online.getWorld();
+
+        Location loc1 = new Location(world, loc1x, loc1y,loc1z);
+        Location loc2 = new Location(world, loc2x,loc2y,loc2z);
+        Location loc3 = new Location(world, loc3x, loc3y, loc3z);
+        Location loc4 = new Location(world, loc4x, loc4y, loc4z);
+        Location loc5 = new Location(world, loc5x, loc5y, loc5z);
+        Location loc6 = new Location(world, loc6x, loc6y, loc6z);
+
+
+
+        Location[] respawn = {loc1, loc2, loc3, loc4, loc5, loc6};
+        Random r = new Random();
+        int locr = r.nextInt(6);
+        int randomint = locr;
+        online.teleport(respawn[randomint]);
+        online.sendMessage("loc:"+randomint);
+
+
     }
 
 
