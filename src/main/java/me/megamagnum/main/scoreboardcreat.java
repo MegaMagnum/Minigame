@@ -17,32 +17,30 @@ public class scoreboardcreat {
    static Objective objective = scoreboard.registerNewObjective("test", "Dummy", ChatColor.RED + "Snowballed");
 
 
+
     public static void scoreboard(Player player){
+        player.setScoreboard(scoreboard);
+        Score score = objective.getScore(player.getPlayer());
+        int i = (int) points.get(player.getName());
+        score.setScore(i);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        for(int i = 0; i < commandJoin.joinedplayers.size(); i++) {
-            Integer kills = (Integer) points.get(player.getName());
-            Score score = objective.getScore(ChatColor.AQUA + player.getName() +":");
-            score.setScore(kills);
-        }
-
-        player.setScoreboard(scoreboard);
 
     }
 
     public static void removescoreboard(Player player){
         ScoreboardManager manager  = Bukkit.getScoreboardManager();
-        Scoreboard scoreboard = manager.getNewScoreboard();
+        Scoreboard scoreboardclean = manager.getNewScoreboard();
 
-        player.setScoreboard(scoreboard);
+        player.setScoreboard(scoreboardclean);
 
     }
     public static void updatescoreboard(Player player){
-        for(int i = 0; i < commandJoin.joinedplayers.size(); i++) {
-            Score score = objective.getScore(ChatColor.AQUA + player.getName() + ":");
-            Integer kills = (Integer) points.get(player.getName());
-            score.setScore(kills);
-        }
+        Score score = objective.getScore(player.getPlayer());
+        int i = (int) points.get(player.getName());
+        score.setScore(i);
+        player.setScoreboard(scoreboard);
+
 
 
     }

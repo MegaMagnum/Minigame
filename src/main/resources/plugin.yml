@@ -11,3 +11,7 @@ commands:
     permission-message: No perms!!!!
   join:
     description: Join a starting minigame
+  temp:
+    description: temp
+  kill:
+    description: kill

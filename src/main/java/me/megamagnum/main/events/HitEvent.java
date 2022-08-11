@@ -24,7 +24,7 @@ public class HitEvent implements Listener {
         if(event.getEntity() instanceof Player) {
             Entity damaged = event.getEntity();
             Entity damagedealer = event.getDamager();
-          //  if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+            if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                 if (commandJoin.joinedplayers.contains(damaged.getUniqueId())) {
                     if (Storage.get().getBoolean("Minigame." + "started", true)) {
                         Integer kills = points.get(damagedealer.getName());
@@ -32,7 +32,7 @@ public class HitEvent implements Listener {
 
 
                         scoreboardcreat.updatescoreboard((Player) damaged);
-                        damaged.setInvulnerable(true);
+                       damaged.setInvulnerable(true);
 
                         new BukkitRunnable(){
                             public void run(){
@@ -47,7 +47,7 @@ public class HitEvent implements Listener {
 
 
 
-               //     }
+                   }
                 }
             }
         }
