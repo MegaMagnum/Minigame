@@ -2,6 +2,8 @@ package me.megamagnum.main.commands;
 
 import me.megamagnum.main.Main;
 import me.megamagnum.main.MinigameTimer;
+import me.megamagnum.main.events.HitEvent;
+import me.megamagnum.main.scoreboardcreat;
 import me.megamagnum.main.storage.Storage;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class commandSetup implements CommandExecutor {
+
+    HashMap points = HitEvent.points;
 
     public HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
     Main main = Main.getPlugin(Main.class);
@@ -51,15 +55,15 @@ public class commandSetup implements CommandExecutor {
 
                     for (Player online : Bukkit.getOnlinePlayers()) {
                         if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
+                            points.put(online.getName(), 0);
+
                             Storage.get().set("Players."+online.getUniqueId() +"."+  "loc", online.getLocation());
                             Storage.save();
                             online.sendMessage(ChatColor.LIGHT_PURPLE + "Minigame starting..");
                             Storage.get().set("Players."+"mainhand." + online.getUniqueId(), online.getInventory().getItemInMainHand());
-                            ItemStack snowball = new ItemStack(Material.SNOWBALL);
-                            ItemMeta snowballmeta = snowball.getItemMeta();
-                            snowballmeta.setDisplayName(ChatColor.AQUA + "Dit is geen sneeuw..");
-                            snowball.setItemMeta(snowballmeta);
-                            snowball.setAmount(64);
+                            //Set scoreboard
+                            scoreboardcreat.scoreboard(online);
+
                             // TP to arena (Storage for coords)
                             tprandom(online);
                             // All start inventory interactions
@@ -67,18 +71,14 @@ public class commandSetup implements CommandExecutor {
                             HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
                             itemhash.put(online, playerinv);
                             online.getInventory().clear();
-                            online.getInventory().addItem(snowball);
+
 
                             // Save old maxhealth and set maxhealth to 1
-                            double maxhealth = 1;
-                            double oldmaxhealth = online.getMaxHealth();
-                            online.setMaxHealth(maxhealth);
                             new BukkitRunnable(){
                                 public void run(){
                                     // End minigame
+                                    scoreboardcreat.removescoreboard(online);
 
-                                    online.setMaxHealth(oldmaxhealth);
-                                    online.getInventory().clear();
 
                                     if(itemhash.containsKey(online)) {
                                         ItemStack[] items = itemhash.get(online);
@@ -124,6 +124,14 @@ public class commandSetup implements CommandExecutor {
         return true;
     }
     public static void tprandom(Player online){
+
+        ItemStack snowball = new ItemStack(Material.SNOWBALL);
+        ItemMeta snowballmeta = snowball.getItemMeta();
+        snowballmeta.setDisplayName(ChatColor.AQUA + "Dit is geen sneeuw..");
+        snowball.setItemMeta(snowballmeta);
+        snowball.setAmount(576);
+
+        online.getInventory().addItem(snowball);
 
         int loc1x =     Storage.get().getInt("Respawnloc."+ "loc1." +"x");
         int loc1y =     Storage.get().getInt("Respawnloc."+ "loc1." +"y");

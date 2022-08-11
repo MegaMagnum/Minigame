@@ -2,6 +2,7 @@ package me.megamagnum.main;
 
 import me.megamagnum.main.commands.commandJoin;
 import me.megamagnum.main.commands.commandSetup;
+import me.megamagnum.main.events.HitEvent;
 import me.megamagnum.main.events.RespawnEvent;
 import me.megamagnum.main.events.DeathEvent;
 import me.megamagnum.main.storage.Storage;
@@ -27,6 +28,7 @@ public final class Main extends JavaPlugin {
         // Event handlers
         getServer().getPluginManager().registerEvents(new RespawnEvent(), this);
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
+        getServer().getPluginManager().registerEvents(new HitEvent(), this);
 
     }
 

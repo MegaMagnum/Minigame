@@ -18,14 +18,19 @@ public class MinigameTimer {
 
         // Timer every 1 minute!
         new BukkitRunnable(){
+            int times = 5;
             public void run(){
-                int times = 5;
                 times--;
+                if(times < 1){
+                    cancel();
+                }
+
                 for(Player online : Bukkit.getOnlinePlayers()){
                 if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
                     String message = ChatColor.RED + "Time remaining: " + times + " minutes!";
 
                     online.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+                    online.sendMessage(message);
                 }
                 }
             }

@@ -1,6 +1,7 @@
 package me.megamagnum.main.commands;
 
 import me.megamagnum.main.storage.Storage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +23,7 @@ public class commandJoin implements CommandExecutor {
                     p.sendMessage(ChatColor.RED + "Already joined!");
                 }else{
                     joinedplayers.add(p.getUniqueId());
-                    p.sendMessage(ChatColor.RED + "Joined the minigame. Wait till it starts!");
+                    Bukkit.broadcastMessage(ChatColor.GRAY+ "[" + ChatColor.GREEN + "+" + ChatColor.GRAY +"] " + ChatColor.RESET + p.getName() + " has joined the minigame!");
                 }
 
 
@@ -43,4 +44,3 @@ public class commandJoin implements CommandExecutor {
 
 
 }
-
