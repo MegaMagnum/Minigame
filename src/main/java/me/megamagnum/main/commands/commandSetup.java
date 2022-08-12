@@ -55,7 +55,8 @@ public class commandSetup implements CommandExecutor {
 
                     for (Player online : Bukkit.getOnlinePlayers()) {
                         if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
-                            points.put(online.getName(), 0);
+                            Integer standard = 0;
+                            points.put(online.getUniqueId(), standard);
 
                             Storage.get().set("Players."+online.getUniqueId() +"."+  "loc", online.getLocation());
                             Storage.save();
@@ -107,7 +108,7 @@ public class commandSetup implements CommandExecutor {
 
                         }
                     }
-                    Storage.get().set("Minigame."+"started", true);
+                 //   Storage.get().set("Minigame."+"started", true);
                     Storage.save();
 
                    Storage.get().set("Minigame." + "IsStarting", false);

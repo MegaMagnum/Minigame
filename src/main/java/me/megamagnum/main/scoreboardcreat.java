@@ -21,7 +21,7 @@ public class scoreboardcreat {
     public static void scoreboard(Player player){
         player.setScoreboard(scoreboard);
         Score score = objective.getScore(player.getPlayer());
-        int i = (int) points.get(player.getName());
+        int i = (int) points.get(player.getUniqueId());
         score.setScore(i);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
@@ -37,7 +37,7 @@ public class scoreboardcreat {
     }
     public static void updatescoreboard(Player player){
         Score score = objective.getScore(player.getPlayer());
-        int i = (int) points.get(player.getName());
+        int i = (int) points.get(player.getUniqueId());
         score.setScore(i);
         player.setScoreboard(scoreboard);
 
