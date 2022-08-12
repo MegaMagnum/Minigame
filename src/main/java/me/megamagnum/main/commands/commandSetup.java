@@ -55,6 +55,7 @@ public class commandSetup implements CommandExecutor {
 
                     for (Player online : Bukkit.getOnlinePlayers()) {
                         if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
+                            online.setSaturation(20);
                             Integer standard = 0;
                             points.put(online.getUniqueId(), standard);
 

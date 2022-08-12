@@ -30,12 +30,13 @@ public class HitEvent implements Listener {
 
 
                 if (commandJoin.joinedplayers.contains(damaged.getUniqueId())) {
-                 //   if (Storage.get().getBoolean("Minigame." + "started", true)) {
+                  if (Storage.get().getBoolean("Minigame." + "started", true)) {
                         Projectile snowball = (Projectile) event.getDamager();
                         if(snowball.getShooter() instanceof Player){
                             Player shooter = ((Player) snowball.getShooter()).getPlayer();
                       Integer kills = points.get(shooter.getUniqueId()) + 1;
                       points.replace(shooter.getUniqueId(), kills);
+                      damaged.setSaturation(20);
 
 
 
@@ -43,6 +44,7 @@ public class HitEvent implements Listener {
                             for (Player online : Bukkit.getOnlinePlayers()) {
                                 if (commandJoin.joinedplayers.contains(online.getUniqueId())) {
                                     scoreboardcreat.updatescoreboard(online);
+
                                 }
                             }
                        damaged.setInvulnerable(true);
@@ -61,7 +63,7 @@ public class HitEvent implements Listener {
 
 
                    }
-            //    }
+               }
             }
         }
 }
