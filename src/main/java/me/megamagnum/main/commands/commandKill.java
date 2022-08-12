@@ -15,7 +15,7 @@ public class commandKill implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        int kills = (int) points.get(player.getName()) + 1;
+        int kills = (int) points.get(player.getUniqueId()) + 1;
         points.replace(player.getName(), kills);
 
 

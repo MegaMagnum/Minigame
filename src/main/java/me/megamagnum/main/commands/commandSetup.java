@@ -65,13 +65,15 @@ public class commandSetup implements CommandExecutor {
                             //Set scoreboard
                             scoreboardcreat.scoreboard(online);
 
-                            // TP to arena (Storage for coords)
-                            tprandom(online);
+
                             // All start inventory interactions
                             ItemStack[] playerinv = online.getInventory().getContents();
                             HashMap<Player, ItemStack[]> itemhash = new HashMap<Player, ItemStack[]>();
                             itemhash.put(online, playerinv);
                             online.getInventory().clear();
+
+                            // TP to arena (Storage for coords)
+                            tprandom(online);
 
 
                             // Save old maxhealth and set maxhealth to 1

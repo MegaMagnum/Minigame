@@ -15,7 +15,7 @@ public class commandTemp implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        int i = (int) points.get(player.getName());
+        int i = (int) points.get(player.getUniqueId());
         player.sendMessage(String.valueOf(i));
 
         scoreboardcreat.updatescoreboard(player);
